@@ -155,6 +155,78 @@ Os artefatos devem ser versionados. Uma alteração no roteiro, na voz ou em uma
 - respeito a licenças, direitos autorais e políticas do YouTube;
 - segredos e credenciais fora do código-fonte.
 
+## Estrutura atual
+
+O projeto possui uma base local em Python com FastAPI, SQLAlchemy, Alembic, SQLite e Pydantic Settings. Não há autenticação nem gerenciamento de usuários.
+
+```text
+app/
+├── api/            # Rotas e endpoints HTTP
+├── core/           # Configuração da aplicação
+├── db/             # Engine, sessões e base SQLAlchemy
+├── models/         # Modelos persistidos
+├── schemas/        # Contratos Pydantic
+└── main.py         # Criação da aplicação FastAPI
+migrations/         # Migrações Alembic
+tests/              # Testes automatizados
+```
+
+## Executar localmente
+
+É necessário ter Python 3.12 ou mais recente instalado. No PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+Copy-Item .env.example .env
+alembic upgrade head
+uvicorn app.main:app --reload
+```
+
+A API estará disponível em `http://127.0.0.1:8000`, a documentação interativa em `http://127.0.0.1:8000/docs` e o endpoint de saúde em `http://127.0.0.1:8000/health`.
+
+O arquivo `.env` controla a configuração local:
+
+```dotenv
+VIDEOMAKER_APP_NAME=VideoMaker
+VIDEOMAKER_APP_ENV=development
+VIDEOMAKER_DEBUG=true
+VIDEOMAKER_DATABASE_URL=sqlite:///./videomaker.db
+```
+
+O `.env` real não é versionado. Use `.env.example` como modelo.
+
+## Banco de dados e migrações
+
+Para criar uma migração depois de adicionar ou alterar modelos SQLAlchemy:
+
+```powershell
+alembic revision --autogenerate -m "descricao da alteracao"
+alembic upgrade head
+```
+
+Para desfazer a última migração:
+
+```powershell
+alembic downgrade -1
+```
+
+## Qualidade e testes
+
+```powershell
+pytest
+ruff check .
+ruff format --check .
+```
+
+Para aplicar automaticamente a formatação:
+
+```powershell
+ruff format .
+```
+
 ## Status
 
-O projeto está na fase de definição. Este README descreve a arquitetura recomendada a partir dos requisitos atuais; nenhuma implementação é estabelecida por ele e as escolhas de fornecedores ainda precisam ser validadas em uma prova de conceito.
+A fundação da API local está criada, incluindo configuração por `.env`, conexão SQLite, migrações e endpoint de saúde. Os módulos funcionais do pipeline de vídeo ainda serão implementados, e as escolhas de fornecedores externos continuam pendentes de validação.
