@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     app_env: Literal["development", "test", "production"] = "development"
     debug: bool = False
     database_url: str = Field(default="sqlite:///./videomaker.db")
+    projects_dir: Path = Field(default=PROJECT_ROOT / "projects")
 
 
 @lru_cache

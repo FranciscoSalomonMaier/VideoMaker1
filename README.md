@@ -194,9 +194,31 @@ VIDEOMAKER_APP_NAME=VideoMaker
 VIDEOMAKER_APP_ENV=development
 VIDEOMAKER_DEBUG=true
 VIDEOMAKER_DATABASE_URL=sqlite:///./videomaker.db
+VIDEOMAKER_PROJECTS_DIR=./projects
 ```
 
 O `.env` real não é versionado. Use `.env.example` como modelo.
+
+### Criar um projeto de vídeo
+
+Com um tópico já cadastrado, envie:
+
+```powershell
+$body = @{
+    topic_id = "UUID_DO_TOPICO"
+    language = "pt-BR"
+    duration_minutes = 7
+    format = "faceless"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+    -Method Post `
+    -Uri http://127.0.0.1:8000/video-projects `
+    -ContentType "application/json" `
+    -Body $body
+```
+
+O endpoint cria o registro com status `DRAFT` e a pasta `projects/<UUID>/`, contendo `project.json` e os diretórios `research`, `scripts`, `audio`, `assets` e `renders`.
 
 ## Banco de dados e migrações
 
