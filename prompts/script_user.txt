@@ -1,0 +1,7 @@
+Crie um roteiro sobre "{title}".
+Idioma: {language}
+Duração desejada: {duration_minutes} minutos
+Formato: {format}
+
+Inclua resumo, roteiro completo e uma lista ordenada de cenas com título, narração,
+descrição visual e duração estimada em segundos.

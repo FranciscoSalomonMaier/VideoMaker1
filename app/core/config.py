@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     debug: bool = False
     database_url: str = Field(default="sqlite:///./videomaker.db")
     projects_dir: Path = Field(default=PROJECT_ROOT / "projects")
+    prompts_dir: Path = Field(default=PROJECT_ROOT / "prompts")
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-5.6-luna"
 
 
 @lru_cache
